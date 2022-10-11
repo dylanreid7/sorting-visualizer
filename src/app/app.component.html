@@ -1,0 +1,18 @@
+<p>
+    <mat-toolbar color="primary">
+        <span>
+            Sorting Algorithm Visualizer
+        </span>
+        <button mat-flat-button (click)="generateArray()">Generate New Array</button>
+        <mat-slider min="1" max="100" step="1" value="50"></mat-slider>
+        <button mat-raised-button (click)="bubble()">Bubble Sort</button>
+        <button mat-raised-button (click)="quick()">Quick Sort</button>
+        <button mat-raised-button (click)="merge()">Merge Sort</button>
+        <button mat-raised-button color="accent">Sort!</button>
+    </mat-toolbar>
+</p>
+<router-outlet></router-outlet>
+<!-- <app-bubble-sort [barNumbers]="barNumbers"></app-bubble-sort> -->
+<app-quick-sort [barNumbers]="barNumbers"></app-quick-sort>
+
+

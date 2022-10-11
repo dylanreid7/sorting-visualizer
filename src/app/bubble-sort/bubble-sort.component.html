@@ -1,0 +1,5 @@
+<div fxLayout="row" fxLayoutAlign="center start" >
+    <div *ngFor="let num of barNumbers; let indexOfElement=index">
+        <div class="bar" [ngStyle]="barStyles" [style.height]="barHeight(num)" [style.color]="colors[indexOfElement]"></div>
+    </div>
+</div>
