@@ -29,7 +29,7 @@ export class AppComponent {
   }
 
   merge() {
-    // fill in later
+    this.MergeSortComponent.mergeSort();
   }
   
   generateArray() {
