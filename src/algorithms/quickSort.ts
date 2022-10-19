@@ -96,7 +96,7 @@ function isSorted(numList: number[], elementNumber: number) {
           }
     }
     return true;
-  }
+}
 
 function swap(numList: number[], firstIndex: number, secondIndex: number) {
   let temp = numList[firstIndex];

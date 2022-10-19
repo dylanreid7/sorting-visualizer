@@ -1,3 +1,4 @@
+import { BarServiceService } from './../bar-service.service';
 import { Component, Input, OnInit } from '@angular/core';
 import getAnimations from 'src/algorithms/bubbleSort';
 const MAIN_COLOR = 'turquoise';
@@ -12,8 +13,7 @@ const SORTED_COLOR = 'purple';
   styleUrls: ['./bubble-sort.component.scss']
 })
 export class BubbleSortComponent implements OnInit {
-  @Input() barNumbers: number[] = [];
-  // @Input() bubbleActive: boolean = false;
+  barNumbers: number[] = [];
   
   numElements: number = 100;
   numWidth: number = 70 * 0.8 / this.numElements; 
@@ -28,29 +28,16 @@ export class BubbleSortComponent implements OnInit {
     'margin-left': this.marginLeft,
   };
 
-  constructor() { }
+  constructor(private barService: BarServiceService) { }
 
   ngOnInit(): void {
+    console.log('bubble');
+    this.barNumbers = this.barService.getBars();
+    console.log('bar numbies in bubble', this.barNumbers);
     for(let i = 0; i < this.numElements; i++) {
       this.colors[i] = MAIN_COLOR;
     }
   }
-
-  // setColorMain(elements: <HTMLElement>[]) {
-  //   elements.forEach((element) => { element.style.backgroundColor = MAIN_COLOR; });
-  // }
-
-  // setColorFront(elements: number[]) {
-  //   elements.forEach((element) => { element.style.backgroundColor = FRONT_COLOR; });
-  // }
-
-  // setColorBack(elements: number[]) {
-  //   elements.forEach((element) => { element.style.backgroundColor = BACK_COLOR; });
-  // }
-
-  // setColorSorted(elements: number[]) {
-  //   elements.forEach((element) => { element.style.backgroundColor = SORTED_COLOR; });
-  // }
 
   barHeight(elementValue: number) {
     // 70% of 100 vh times elementValue
@@ -70,7 +57,9 @@ export class BubbleSortComponent implements OnInit {
     return elementColor === SORTED_COLOR;
   }
 
-  bubbleSort() {
+  sort() {
+    console.log('bubble sort!!');
+    this.barNumbers = this.barService.getBars();
     let animations = getAnimations(this.barNumbers);
     let bars = document.getElementsByClassName('bar');
     let swapCount = 0;

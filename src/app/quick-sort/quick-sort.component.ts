@@ -1,3 +1,4 @@
+import { BarServiceService } from './../bar-service.service';
 import { Component, Input, OnInit } from '@angular/core';
 import getAnimations from 'src/algorithms/quickSort';
 const MAIN_COLOR = 'turquoise';
@@ -11,7 +12,6 @@ const SORTED_COLOR = 'purple';
   styleUrls: ['./quick-sort.component.scss']
 })
 export class QuickSortComponent implements OnInit {
-  @Input() barNumbers: number[] = [];
 
   numElements: number = 100;
   numWidth: number = 70 * 0.8 / this.numElements; 
@@ -26,7 +26,7 @@ export class QuickSortComponent implements OnInit {
     'margin-left': this.marginLeft,
   };
 
-  constructor() { }
+  constructor(private barService: BarServiceService) { }
 
   ngOnInit(): void {
     for(let i = 0; i < this.numElements; i++) {
@@ -41,6 +41,10 @@ export class QuickSortComponent implements OnInit {
     return height;
   }
 
+  get barNumbers(): number[] {
+    return this.barService.barNumbers;
+  }
+
   // delay(time: number) {
   //   return new Promise(resolve => setTimeout(resolve, time));
   // }
@@ -52,89 +56,10 @@ export class QuickSortComponent implements OnInit {
     return elementColor === SORTED_COLOR;
   }
 
-  // bubbleSort() {
-  //   let animations = getAnimations(this.barNumbers);
-  //   let bars = document.getElementsByClassName('bar');
-  //   let swapCount = 0;
-  //   const length = bars.length;
-    
-  //   for (let i = 0; i < animations.length; i++) {
-  //     let type = animations[i].type;
-  //     let elementNumbers = animations[i].elements;
-  //     let elOne = elementNumbers[0];
-  //     let elTwo = elementNumbers[1];
-  //     if (type === 'compare') {
-  //       setTimeout(() => {
-  //         let elementOne = <HTMLElement>bars[elOne];
-  //         let elementTwo = <HTMLElement>bars[elTwo];
-  //         if (elOne < length - swapCount - 1) {
-  //           elementOne.style.backgroundColor = FRONT_COLOR;
-  //         }
-  //         if (elTwo < length - swapCount - 1) {
-  //           elementTwo.style.backgroundColor = BACK_COLOR;
-  //         }
-  //       }, 10 * i);
-  //     }
-  //     if (type === 'swap') {    
-  //       setTimeout(() => {
-  //         let elementOne = <HTMLElement>bars[elementNumbers[0]];
-  //         let elementTwo = <HTMLElement>bars[elementNumbers[1]];
-  //         let elementOneHeight = elementOne.style.height;
-  //         let elementTwoHeight = elementTwo.style.height;
-          
-  //         elementOne.style.height = elementTwoHeight;
-  //         elementTwo.style.height = elementOneHeight;
-  //         if (elOne < length - swapCount - 1) {
-  //           elementOne.style.backgroundColor = SWAP_COLOR;
-  //         }
-  //         if (elTwo < length - swapCount - 1) {
-  //           elementTwo.style.backgroundColor = SWAP_COLOR;
-  //         }
-  //       }, 10 * i);
-  //     }
-  //     if (type === 'returnColors') {
-  //       setTimeout(() => {
-  //         let elementOne = <HTMLElement>bars[elementNumbers[0]];
-  //         let elementTwo = <HTMLElement>bars[elementNumbers[1]];
-  //         if (elOne < length - swapCount - 1) {
-  //           elementOne.style.backgroundColor = MAIN_COLOR;
-  //         }
-  //         if (elTwo < length - swapCount - 1) {
-  //             elementTwo.style.backgroundColor = MAIN_COLOR;
-  //         }
-  //       }, 10 * i);
-  //     }
-  //     if (type === 'sorted') {
-  //       let elementOne = <HTMLElement>bars[elementNumbers[0]];
-
-  //       setTimeout(() => {
-  //         elementOne.style.backgroundColor = SORTED_COLOR;
-  //         swapCount++;
-  //       }, 10 * i);
-  //     }
-  //   }
-  // }
-
-    //   let animations = getAnimations(this.barNumbers);
-  //   let bars = document.getElementsByClassName('bar');
-  //   let swapCount = 0;
-  //   const length = bars.length;
-    
-  //   for (let i = 0; i < animations.length; i++) {
-  //     let type = animations[i].type;
-  //     let elementNumbers = animations[i].elements;
-  //     let elOne = elementNumbers[0];
-  //     let elTwo = elementNumbers[1];
-  //     if (type === 'compare') {
-  //       setTimeout(() => {
-  //         let elementOne = <HTMLElement>bars[elOne];
-  //         let elementTwo = <HTMLElement>bars[elTwo];
-
-
-  quickSort() {
-
+  sort() {
+    let barNumbers = this.barNumbers;
     console.log('running quick sort');
-    let animations = getAnimations(this.barNumbers);
+    let animations = getAnimations(barNumbers);
     let bars = document.getElementsByClassName('bar');
     let swapCount = 0;
     // iterate through the animations

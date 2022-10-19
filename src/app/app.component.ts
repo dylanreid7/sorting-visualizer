@@ -1,7 +1,9 @@
+import { BarServiceService } from './bar-service.service';
 import { MergeSortComponent } from './merge-sort/merge-sort.component';
 import { QuickSortComponent } from './quick-sort/quick-sort.component';
 import { BubbleSortComponent } from './bubble-sort/bubble-sort.component';
 import { Component, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -9,38 +11,58 @@ import { Component, ViewChild } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @ViewChild(BubbleSortComponent)
-  private bubbleSortComponent!: BubbleSortComponent;
-  @ViewChild(QuickSortComponent)
-  private QuickSortComponent!: QuickSortComponent;
-  title = 'sorting-visualizer';
-  @ViewChild(MergeSortComponent)
-  private MergeSortComponent!: MergeSortComponent;
-
-
   barNumbers: number[] = [];
 
-  bubble() {
-    this.bubbleSortComponent.bubbleSort();
+  generateDisabled: boolean = false;
+  generatePressed: boolean = false;
+  sortOptionsDisabled: boolean = true;
+  sortDisabled: boolean = true;
+  activeSortingMethod: string = '';
+  generateColor: string = 'accent';
+  bubbleColor: string = '';
+  quickColor: string = '';
+  mergeColor: string = '';
+  sortColor: string = '';
+
+  constructor(private _router: Router, private barService: BarServiceService) {}
+
+  onActivate(componentRef: any) {
+    console.log('comp ref: ', componentRef);
+    componentRef.sort();
   }
 
-  quick() {
-    this.QuickSortComponent.quickSort();
+  generate() {
+    this.barNumbers = this.barService.generateArray();
+    this.generatePressed = true;
+    // this.generateColor = '';
+    this.generateDisabled = true;
+    this.sortOptionsDisabled = false;
+    console.log('bar nums: ', this.barNumbers);
   }
 
-  merge() {
-    this.MergeSortComponent.mergeSort();
+  bubbleClick() {
+    this.activeSortingMethod = 'bubbleSort';
+    this.sortDisabled = false;
+    console.log('bubbled clicked');
   }
-  
-  generateArray() {
-    let result: number[] = [];
-    for (let i = 0; i < 100; i++) {
-      result.push(this.randomNumber());
+
+  quickClick() {
+    this.activeSortingMethod = 'quickSort';
+    this.sortDisabled = false;
+  }
+
+  mergeClick() {
+    this.activeSortingMethod = 'mergeSort';
+    this.sortDisabled = false;
+  }
+
+  sortClick() {
+    if (this.activeSortingMethod === 'bubbleSort') {
+      this._router.navigate(['bubble']);
+    } else if (this.activeSortingMethod === 'quickSort') {
+      this._router.navigate(['quick']);
+    } else if (this.activeSortingMethod === 'mergeSort') {
+      this._router.navigate(['merge']);
     }
-    this.barNumbers = result;
-  }
-
-  randomNumber() {
-    return Math.floor(Math.random() * 995) + 5;
   }
 }

@@ -1,0 +1,9 @@
+<div fxLayout="row" fxLayoutAlign="center start">
+    <div *ngIf="!barNumbers.length" class="mat-h3">Press <b>Generate New Array</b> to Begin</div>
+    <div *ngIf="barNumbers.length" class="mat-h3">Select a Sorting Option!</div> 
+</div>
+<div fxLayout="row" fxLayoutAlign="center start" >
+    <div *ngFor="let num of barNumbers; let indexOfElement=index">
+        <div class="bar" [ngStyle]="barStyles" [style.height]="barHeight(num)" [style.color]="colors[indexOfElement]"></div>
+    </div>
+</div>

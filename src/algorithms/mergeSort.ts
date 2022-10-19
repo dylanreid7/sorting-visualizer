@@ -20,6 +20,19 @@ When all values to the left are sorted, color purple x
 
 */
 
+function isSorted(numList: number[], elementNumber: number) {
+    if (elementNumber >= numList.length) {
+      return false;
+    }
+    const sliced = numList.slice(0, elementNumber + 1);
+    for (let i = 0; i < sliced.length - 1; i++) {
+      if (sliced[i] > sliced[i + 1]) {
+              return false;
+          }
+    }
+    return true;
+}
+
 
 function merge(numList: number[], left: number, mid: number, right: number) {
     let leftList = numList.slice(left, mid + 1);
@@ -42,6 +55,7 @@ function merge(numList: number[], left: number, mid: number, right: number) {
       console.log('left i', leftIndex);
       console.log('righ l', rightList);
       console.log('right i', rightIndex);
+      
       animations.push({
           'type': 'compare',
           'elements': [leftIndex + left, rightIndex + mid + 1],
@@ -50,48 +64,55 @@ function merge(numList: number[], left: number, mid: number, right: number) {
           'type': 'returnColors',
           'elements': [leftIndex + left, rightIndex + mid + 1],
       });
-      let indexOne: number, indexTwo: number;
+      let placementIndex: number, numElementsToShift: number;
+      let indexFrom = 0;
       if (!leftList[leftIndex]) {
         numList[index] = rightList[rightIndex];
         rightIndex++;
-        indexOne = index;
-        indexTwo = rightIndex + mid + 1;
+        // indexOne is the place to put it, indexTwo is the height that it should have
+        placementIndex = index;
+        numElementsToShift = 0;
+        // shiftOver = rightIndex + mid + 1;
         
       }
       else if (!rightList[rightIndex]) {
         numList[index] = leftList[leftIndex];
         leftIndex++;
-        indexOne = index;
-        indexTwo = left + leftIndex;
+        placementIndex = index;
+        numElementsToShift = 0;
+        // indexTwo = left + leftIndex;
       }
       else if (leftList[leftIndex] < rightList[rightIndex]) {
         // array at index equals left at left
         numList[index] = leftList[leftIndex];
         leftIndex++;
-        indexOne = index;
-        indexTwo = left + leftIndex;
+        placementIndex = index;
+        numElementsToShift = 0;
       } else {
         // array at index equals right at right index
         numList[index] = rightList[rightIndex];
+        placementIndex = index;
+        indexFrom = right - (rightList.length - 1 - rightIndex);
         rightIndex++;
-        indexOne = index;
-        indexTwo = rightIndex + mid + 1;
+        numElementsToShift = (leftList.length - leftIndex - 1) + (rightList.length - rightIndex - 1);
       }
       animations.push({
         'type': 'swap',
-        'elements': [indexOne, indexTwo],
+        'elements': [placementIndex, indexFrom, numElementsToShift],
       });
       animations.push({
           'type': 'returnColors',
-          'elements': [indexOne, indexTwo],
+          'elements': [placementIndex],
       });
+      if (isSorted(numList, index)) {
+        animations.push({
+            'type': 'sorted',
+            'elements': [index]
+        })
+    };
       index++;
     }
 
-    animations.push({
-        'type': 'sorted',
-        'elements': [left, right],
-    });
 }
   // const array = [3, 4, 7, 8, 9, 1, 2, 5, 10, 0, 9];
   // merge(array, 0 , 4, 8);

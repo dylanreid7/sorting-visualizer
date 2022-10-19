@@ -1,7 +1,7 @@
+import { BarServiceService } from './bar-service.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StandardSortComponent } from './standard-sort/standard-sort.component';
@@ -12,6 +12,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { MatSliderModule } from '@angular/material/slider';
     StandardSortComponent,
     MergeSortComponent,
     BubbleSortComponent,
-    QuickSortComponent
+    QuickSortComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +32,7 @@ import { MatSliderModule } from '@angular/material/slider';
     BrowserAnimationsModule,
     MatSliderModule
   ],
-  providers: [],
+  providers: [BarServiceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
