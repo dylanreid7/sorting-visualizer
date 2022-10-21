@@ -1,8 +1,5 @@
 import { HomeComponent } from './home/home.component';
 import { BarServiceService } from './bar-service.service';
-import { MergeSortComponent } from './merge-sort/merge-sort.component';
-import { QuickSortComponent } from './quick-sort/quick-sort.component';
-import { BubbleSortComponent } from './bubble-sort/bubble-sort.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
