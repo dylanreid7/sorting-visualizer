@@ -9,20 +9,9 @@ const MAIN_COLOR = 'turquoise';
 })
 export class HomeComponent implements OnInit {
   numElements: number = 100;
-  numWidth: number = 70 * 0.8 / this.numElements; 
-  width: string = `${this.numWidth}vw`;
-  numMargin: number = this.numWidth * 0.25;
-  marginLeft: string = `${this.numMargin}vw`;
   
   colors: string[] = [];
   sorted: boolean[] = [];
-
-  barStyles = {
-    'width': this.width,
-    'margin-left': this.marginLeft,
-  };
-
-  
 
   constructor(private barService: BarServiceService) { }
 
@@ -43,6 +32,11 @@ export class HomeComponent implements OnInit {
   get barNumbers(): number[] {
     return this.barService.barNumbers;
   }
+
+  get barStyles(): any {
+    return this.barService.barStyles;
+  }
+  
 
   sort() {
     return;

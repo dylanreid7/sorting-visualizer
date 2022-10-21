@@ -14,17 +14,12 @@ const SORTED_COLOR = 'purple';
 export class QuickSortComponent implements OnInit {
 
   numElements: number = 100;
-  numWidth: number = 70 * 0.8 / this.numElements; 
-  width: string = `${this.numWidth}vw`;
-  numMargin: number = this.numWidth * 0.25;
-  marginLeft: string = `${this.numMargin}vw`;
-
+  // numWidth: number = 70 * 0.8 / this.numElements; 
+  // width: string = `${this.numWidth}vw`;
+  // numMargin: number = this.numWidth * 0.25;
+  // marginLeft: string = `${this.numMargin}vw`;
+  timeDelay: number = 10;
   colors: string[] = [];
-
-  barStyles = {
-    'width': this.width,
-    'margin-left': this.marginLeft,
-  };
 
   constructor(private barService: BarServiceService) { }
 
@@ -41,13 +36,13 @@ export class QuickSortComponent implements OnInit {
     return height;
   }
 
+  get barStyles() {
+    return this.barService.barStyles;
+  }
+
   get barNumbers(): number[] {
     return this.barService.barNumbers;
   }
-
-  // delay(time: number) {
-  //   return new Promise(resolve => setTimeout(resolve, time));
-  // }
 
   isAlreadySorted(elementNum: number) {
     let bars = document.getElementsByClassName('bar');
@@ -61,6 +56,7 @@ export class QuickSortComponent implements OnInit {
     console.log('running quick sort');
     let animations = getAnimations(barNumbers);
     let bars = document.getElementsByClassName('bar');
+    this.timeDelay = this.barService.timeDelay;
     let swapCount = 0;
     // iterate through the animations
       // check type
@@ -82,7 +78,7 @@ export class QuickSortComponent implements OnInit {
             let elementTwo = <HTMLElement>bars[elTwo];
             elementTwo.style.backgroundColor = BACK_COLOR;
           }
-        }, 10 * i);
+        }, this.timeDelay * i);
       } else if (type === 'swap') {
         setTimeout(() => {
           
@@ -96,7 +92,7 @@ export class QuickSortComponent implements OnInit {
           
             elementOne.style.backgroundColor = SWAP_COLOR;
             elementTwo.style.backgroundColor = SWAP_COLOR;
-        }, 10 * i);
+        }, this.timeDelay * i);
         
       } else if (type === 'returnColors') {
         setTimeout(() => {
@@ -108,9 +104,9 @@ export class QuickSortComponent implements OnInit {
             let elementTwo = <HTMLElement>bars[elementNumbers[1]];
             elementTwo.style.backgroundColor = MAIN_COLOR;
           // }  
-        }, 10 * i);
+        }, this.timeDelay * i);
       } else if (type === 'sorted') {
-        console.log('sorted: ', elOne);
+        // console.log('sorted: ', elOne);
         let elementOne = <HTMLElement>bars[elementNumbers[0]];
         if (sortedTracker < elOne) {
           sortedTracker = elOne;
@@ -123,10 +119,10 @@ export class QuickSortComponent implements OnInit {
           }
           // elementOne.style.backgroundColor = SORTED_COLOR;
           // swapCount++;
-        }, 10 * i);
+        }, this.timeDelay * i);
       }
     }
-    console.log('sorted tracker: ', sortedTracker);
+    // console.log('sorted tracker: ', sortedTracker);
   }
 
 }

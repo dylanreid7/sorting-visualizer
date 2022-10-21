@@ -13,6 +13,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
 import { HomeComponent } from './home/home.component';
+import { SelectionSortComponent } from './selection-sort/selection-sort.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { HomeComponent } from './home/home.component';
     MergeSortComponent,
     BubbleSortComponent,
     QuickSortComponent,
-    HomeComponent
+    HomeComponent,
+    SelectionSortComponent
   ],
   imports: [
     BrowserModule,

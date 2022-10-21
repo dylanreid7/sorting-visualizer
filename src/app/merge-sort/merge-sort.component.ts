@@ -15,20 +15,13 @@ const SORTED_COLOR = 'purple';
 })
 export class MergeSortComponent implements OnInit {
   numElements: number = 100;
-  numWidth: number = 70 * 0.8 / this.numElements; 
-  width: string = `${this.numWidth}vw`;
-  numMargin: number = this.numWidth * 0.25;
-  marginLeft: string = `${this.numMargin}vw`;
+  // numWidth: number = 70 * 0.8 / this.numElements; 
+  // width: string = `${this.numWidth}vw`;
+  // numMargin: number = this.numWidth * 0.25;
+  // marginLeft: string = `${this.numMargin}vw`;
 
   colors: string[] = [];
   sorted: boolean[] = [];
-
-  barStyles = {
-    'width': this.width,
-    'margin-left': this.marginLeft,
-  };
-
-  
 
   constructor(private barService: BarServiceService) { }
 
@@ -39,8 +32,11 @@ export class MergeSortComponent implements OnInit {
     console.log('bar numbers: ', this.barNumbers);
   }
 
+  get barStyles() {
+    return this.barService.barStyles;
+  }
+
   barHeight(elementValue: number) {
-    // 70% of 100 vh times elementValue
     const numHeight = 0.7 * 0.1 * elementValue;
     const height = `${numHeight}vh`;
     return height;
@@ -52,7 +48,6 @@ export class MergeSortComponent implements OnInit {
 
   sort() {
     console.log('merge sort!!');
-    let barNumbers = this.barNumbers;
     let animations = getAnimations(this.barNumbers);
 
     for (let i = 0; i < animations.length; i++) {
@@ -73,9 +68,9 @@ export class MergeSortComponent implements OnInit {
         }, i * 10);
       } else if (type === 'swap') {
         setTimeout(() => {
-          console.log('elOne: ', elOne);
-          console.log('elTwo: ', elTwo);
-          console.log('typeof eltwo: ', typeof elTwo);
+          // console.log('elOne: ', elOne);
+          // console.log('elTwo: ', elTwo);
+          // console.log('typeof eltwo: ', typeof elTwo);
           // color element one with swap color
           if (!this.sorted[elOne]) {
             elementOne.style.backgroundColor = SWAP_COLOR;
@@ -85,8 +80,8 @@ export class MergeSortComponent implements OnInit {
           }
           // create temp element one height
           let tempHeight: string = elementOne.style.height;
-          console.log('tempHeight: ', tempHeight);
-          console.log('type of temp', typeof tempHeight);
+          // console.log('tempHeight: ', tempHeight);
+          // console.log('type of temp', typeof tempHeight);
           // put element two height in element ones spot
           elementOne.style.height = elementTwo.style.height;
           // iterate through, up to end
@@ -136,7 +131,7 @@ export class MergeSortComponent implements OnInit {
           // elementTwo.style.backgroundColor = SORTED_COLOR;
           this.sorted[elOne] = true;
           // this.sorted[elTwo] = true;
-          console.log('sorted: ', this.sorted);
+          // console.log('sorted: ', this.sorted);
         }, i * 10);
       }
     }

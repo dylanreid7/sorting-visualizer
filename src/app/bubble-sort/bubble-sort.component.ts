@@ -16,27 +16,25 @@ export class BubbleSortComponent implements OnInit {
   barNumbers: number[] = [];
   
   numElements: number = 100;
-  numWidth: number = 70 * 0.8 / this.numElements; 
-  width: string = `${this.numWidth}vw`;
-  numMargin: number = this.numWidth * 0.25;
-  marginLeft: string = `${this.numMargin}vw`;
+  // numWidth: number = 70 * 0.8 / this.numElements; 
+  // width: string = `${this.numWidth}vw`;
+  // numMargin: number = this.numWidth * 0.25;
+  // marginLeft: string = `${this.numMargin}vw`;
+  timeDelay: number = 10;
 
   colors: string[] = [];
-
-  barStyles = {
-    'width': this.width,
-    'margin-left': this.marginLeft,
-  };
 
   constructor(private barService: BarServiceService) { }
 
   ngOnInit(): void {
-    console.log('bubble');
     this.barNumbers = this.barService.getBars();
-    console.log('bar numbies in bubble', this.barNumbers);
     for(let i = 0; i < this.numElements; i++) {
       this.colors[i] = MAIN_COLOR;
     }
+  }
+
+  get barStyles() {
+    return this.barService.barStyles;
   }
 
   barHeight(elementValue: number) {
@@ -45,10 +43,6 @@ export class BubbleSortComponent implements OnInit {
     const height = `${numHeight}vh`;
     return height;
   }
-
-  // delay(time: number) {
-  //   return new Promise(resolve => setTimeout(resolve, time));
-  // }
 
   isAlreadySorted(elementNum: number) {
     let bars = document.getElementsByClassName('bar');
@@ -62,6 +56,8 @@ export class BubbleSortComponent implements OnInit {
     this.barNumbers = this.barService.getBars();
     let animations = getAnimations(this.barNumbers);
     let bars = document.getElementsByClassName('bar');
+    this.timeDelay = this.barService.timeDelay;
+    console.log('time delay ', this.timeDelay);
     let swapCount = 0;
     const length = bars.length;
     
@@ -80,7 +76,7 @@ export class BubbleSortComponent implements OnInit {
           if (elTwo < length - swapCount - 1) {
             elementTwo.style.backgroundColor = BACK_COLOR;
           }
-        }, 10 * i);
+        }, this.timeDelay * i);
       }
       if (type === 'swap') {    
         setTimeout(() => {
@@ -97,7 +93,7 @@ export class BubbleSortComponent implements OnInit {
           if (elTwo < length - swapCount - 1) {
             elementTwo.style.backgroundColor = SWAP_COLOR;
           }
-        }, 10 * i);
+        }, this.timeDelay * i);
       }
       if (type === 'returnColors') {
         setTimeout(() => {
@@ -109,7 +105,7 @@ export class BubbleSortComponent implements OnInit {
           if (elTwo < length - swapCount - 1) {
               elementTwo.style.backgroundColor = MAIN_COLOR;
           }
-        }, 10 * i);
+        }, this.timeDelay * i);
       }
       if (type === 'sorted') {
         let elementOne = <HTMLElement>bars[elementNumbers[0]];
@@ -117,29 +113,10 @@ export class BubbleSortComponent implements OnInit {
         setTimeout(() => {
           elementOne.style.backgroundColor = SORTED_COLOR;
           swapCount++;
-        }, 10 * i);
+        }, this.timeDelay * i);
       }
     }
   }
-
-  // async bubbleSort(nums: number[]) {
-  //   for (let i = 0; i < nums.length; i++) {
-  //     for (let j = 0; j < nums.length - 1; j++) {
-  //       await this.delay(1);
-  //       this.setColorFront(j);
-  //       this.setColorBack(j + 1);
-  //       if (nums[j] > nums[j + 1]) {
-  //         let temp = nums[j];
-  //         nums[j] = nums[j + 1];
-  //         nums[j + 1] = temp;
-  //       } 
-  //       this.setColorMain(j);
-  //       this.setColorMain(j + 1);
-  //     }
-  //     this.setColorSorted(nums.length - i - 1);
-  //   }
-  //   return nums;
-  // }
 }
 
 

@@ -51,10 +51,10 @@ function merge(numList: number[], left: number, mid: number, right: number) {
     // while index less than right minus left
     while (index <= right) {
       // if left at left index is less than right at right index
-      console.log('left list: ', leftList);
-      console.log('left i', leftIndex);
-      console.log('righ l', rightList);
-      console.log('right i', rightIndex);
+    //   console.log('left list: ', leftList);
+    //   console.log('left i', leftIndex);
+    //   console.log('righ l', rightList);
+    //   console.log('right i', rightIndex);
       
       animations.push({
           'type': 'compare',

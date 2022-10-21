@@ -19,7 +19,7 @@ function quickSort(numList: number[], low: number,  high: number) {
         quickSort(numList, pi + 1, high);
     }
 
-    console.log('numList: ', numList);
+    // console.log('numList: ', numList);
 }
 
 

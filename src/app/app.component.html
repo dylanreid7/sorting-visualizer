@@ -4,17 +4,16 @@
             Sorting Algorithm Visualizer
         </span>
         <button mat-flat-button (click)="generate()" color="accent" [disabled]="generateDisabled">Generate New Array</button>
-        <mat-slider min="1" max="100" step="1" value="50"></mat-slider>
+        <mat-slider (change)="updateNumBars($event)" min="10" max="500" step="10" [value]="numBars" [disabled]="sliderDisabled"></mat-slider>
+        <p>{{numBars}} Elements</p>
         <button mat-raised-button (click)="bubbleClick()" [color]="bubbleColor" [disabled]="sortOptionsDisabled">Bubble Sort</button>
         <button mat-raised-button (click)="quickClick()" [color]="quickColor" [disabled]="sortOptionsDisabled">Quick Sort</button>
         <button mat-raised-button (click)="mergeClick()" [color]="mergeColor" [disabled]="sortOptionsDisabled">Merge Sort</button>
+        <button mat-raised-button (click)="selectionClick()" [color]="selectionColor" [disabled]="sortOptionsDisabled">Selection Sort</button>
         <button mat-raised-button (click)="sortClick()" color="accent" [disabled]="sortDisabled">Sort!</button>
     </mat-toolbar>
 </p>
 <router-outlet (activate)="onActivate($event)"></router-outlet>
-<!-- <app-bubble-sort [barNumbers]="barNumbers"></app-bubble-sort> -->
-<!-- <app-quick-sort [barNumbers]="barNumbers"></app-quick-sort> -->
-<!-- <app-merge-sort [barNumbers]="barNumbers"></app-merge-sort> -->
-<!-- <router-outlet></router-outlet> -->
+
 
 

@@ -4,6 +4,7 @@ import { QuickSortComponent } from './quick-sort/quick-sort.component';
 import { BubbleSortComponent } from './bubble-sort/bubble-sort.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { SelectionSortComponent } from './selection-sort/selection-sort.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'merge',
     component: MergeSortComponent
+  },
+  {
+    path: 'selection',
+    component: SelectionSortComponent
   }
 ];
 
