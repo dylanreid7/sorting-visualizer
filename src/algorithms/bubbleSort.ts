@@ -2,7 +2,7 @@ import { Animation } from '../core/config/animation';
 
 let animations: Animation[] = [];
 
-export default function getAnimations(numList: number[]) {
+export default function getBubbleAnimations(numList: number[]) {
     let tempList = numList.slice();
     bubbleSort(tempList);
     let tempAnimations = animations.slice();

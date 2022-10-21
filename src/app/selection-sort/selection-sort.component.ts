@@ -14,6 +14,7 @@ const SORTED_COLOR = 'purple';
   styleUrls: ['./selection-sort.component.scss']
 })
 export class SelectionSortComponent implements OnInit {
+  
   numElements: number = 100;
 
   timeDelay: number = 10;
@@ -22,6 +23,7 @@ export class SelectionSortComponent implements OnInit {
   constructor(private barService: BarServiceService) { }
 
   ngOnInit(): void {
+    // this.barNumbers = this.barService.getBars();
     for(let i = 0; i < this.numElements; i++) {
       this.colors[i] = MAIN_COLOR;
     }
@@ -51,30 +53,36 @@ export class SelectionSortComponent implements OnInit {
 
   sort() {
       let barNumbers = this.barNumbers;
-      console.log('running quick sort');
+      console.log('bar nums in sele: ', barNumbers);
+      console.log('running seelction sort');
       let animations = getAnimations(barNumbers);
       console.log('selection animations', animations);
       let bars = document.getElementsByClassName('bar');
       this.timeDelay = this.barService.timeDelay;
-      let swapCount = 0;
+      // let swapCount = 0;
       // iterate through the animations
         // check type
           // do the proper animation with that type
-      let sortedTracker = 0;
+      // let sortedTracker = 0;
       for (let i = 0; i < animations.length; i++) {
         let type = animations[i].type;
         let elementNumbers = animations[i].elements;
         let elOne = elementNumbers[0];
         let elTwo = elementNumbers[1];
-        let elementOne = <HTMLElement>bars[elOne];
-        let elementTwo = <HTMLElement>bars[elTwo];
-        if (type === 'compare ') {
+        
+        console.log('elOne: ', elOne);
+        if (type === 'compare') {
+          'comp';
           setTimeout(() => {
+            let elementOne = <HTMLElement>bars[elOne];
+        let elementTwo = <HTMLElement>bars[elTwo];
             elementOne.style.backgroundColor = FRONT_COLOR;
             elementTwo.style.backgroundColor = BACK_COLOR;
           }, this.timeDelay * i);
         } else if (type === 'swap') {
           setTimeout(() => {
+            let elementOne = <HTMLElement>bars[elOne];
+        let elementTwo = <HTMLElement>bars[elTwo];
             elementOne.style.backgroundColor = SWAP_COLOR;
             elementTwo.style.backgroundColor = SWAP_COLOR;
             let tempHeight = elementOne.style.height;
@@ -83,11 +91,20 @@ export class SelectionSortComponent implements OnInit {
           }, this.timeDelay * i);
         } else if (type === 'returnColors') {
           setTimeout(() => {
+            let elementOne = <HTMLElement>bars[elOne];
+
+            
             elementOne.style.backgroundColor = MAIN_COLOR;
-            elementTwo.style.backgroundColor = MAIN_COLOR; 
+            if (elTwo) {
+              let elementTwo = <HTMLElement>bars[elTwo];
+              elementTwo.style.backgroundColor = MAIN_COLOR;
+            }
+             
           }, this.timeDelay * i);
         } else if (type === 'sorted') {
           setTimeout(() => {
+            let elementOne = <HTMLElement>bars[elOne];
+        
             elementOne.style.backgroundColor = SORTED_COLOR;
           }, this.timeDelay * i);
         }

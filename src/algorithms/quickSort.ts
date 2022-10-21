@@ -2,7 +2,7 @@ import { Animation } from '../core/config/animation';
 
 let animations: Animation[] = [];
 
-export default function getAnimations(numList: number[]) {
+export default function getQuickAnimations(numList: number[]) {
     let tempList = numList.slice();
     quickSort(tempList, 0, tempList.length - 1);
     let tempAnimations = animations.slice();

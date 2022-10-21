@@ -1,6 +1,6 @@
 <p>
     <mat-toolbar color="primary">
-        <span>
+        <span routerLinkActive="/">
             Sorting Algorithm Visualizer
         </span>
         <button mat-flat-button (click)="generate()" color="accent" [disabled]="generateDisabled">Generate New Array</button>
@@ -13,7 +13,7 @@
         <button mat-raised-button (click)="sortClick()" color="accent" [disabled]="sortDisabled">Sort!</button>
     </mat-toolbar>
 </p>
-<router-outlet (activate)="onActivate($event)"></router-outlet>
-
+<!-- <router-outlet (activate)="onActivate($event)"></router-outlet> -->
+<app-home></app-home>
 
 

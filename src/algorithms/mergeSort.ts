@@ -3,7 +3,7 @@ import { Animation } from './../core/config/animation';
 let animations: Animation[] = [];
 
 
-export default function getAnimations(numList: number[]) {
+export default function getMergeAnimations(numList: number[]) {
     let tempList = numList.slice();
     mergeSort(tempList, 0, tempList.length - 1);
     let tempAnimations = animations.slice();

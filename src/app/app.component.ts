@@ -1,3 +1,4 @@
+import { HomeComponent } from './home/home.component';
 import { BarServiceService } from './bar-service.service';
 import { MergeSortComponent } from './merge-sort/merge-sort.component';
 import { QuickSortComponent } from './quick-sort/quick-sort.component';
@@ -13,6 +14,7 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
   barNumbers: number[] = [];
 
+
   numBars: number = 100;
   generateDisabled: boolean = false;
   generatePressed: boolean = false;
@@ -26,6 +28,8 @@ export class AppComponent implements OnInit {
   mergeColor: string = '';
   selectionColor: string = '';
   sortColor: string = '';
+
+  @ViewChild(HomeComponent) home!: HomeComponent;
 
   constructor(private _router: Router, private barService: BarServiceService) {}
 
@@ -44,7 +48,7 @@ export class AppComponent implements OnInit {
   }
 
   bubbleClick() {
-    this.activeSortingMethod = 'bubbleSort';
+    this.activeSortingMethod = 'bubble';
     this.sortDisabled = false;
     this.bubbleColor = 'accent';
     this.quickColor = '';
@@ -53,7 +57,7 @@ export class AppComponent implements OnInit {
   }
 
   quickClick() {
-    this.activeSortingMethod = 'quickSort';
+    this.activeSortingMethod = 'quick';
     this.sortDisabled = false;
     this.quickColor = 'accent';
     this.bubbleColor = '';
@@ -62,7 +66,7 @@ export class AppComponent implements OnInit {
   }
 
   mergeClick() {
-    this.activeSortingMethod = 'mergeSort';
+    this.activeSortingMethod = 'merge';
     this.sortDisabled = false;
     this.mergeColor = 'accent';
     this.bubbleColor = '';
@@ -71,7 +75,7 @@ export class AppComponent implements OnInit {
   }
 
   selectionClick() {
-    this.activeSortingMethod = 'selectionSort';
+    this.activeSortingMethod = 'selection';
     this.sortDisabled = false;
     this.selectionColor = 'accent';
     this.mergeColor = '';
@@ -80,21 +84,22 @@ export class AppComponent implements OnInit {
   }
 
   sortClick() {
-    if (this.activeSortingMethod === 'bubbleSort') {
-      this._router.navigate(['bubble']);
-    } else if (this.activeSortingMethod === 'quickSort') {
-      this._router.navigate(['quick']);
-    } else if (this.activeSortingMethod === 'mergeSort') {
-      this._router.navigate(['merge']);
-    } else if (this.activeSortingMethod === 'selectionSort') {
-      this._router.navigate(['selection']);
-    }
+    // if (this.activeSortingMethod === 'bubbleSort') {
+    //   this._router.navigate(['bubble']);
+    // } else if (this.activeSortingMethod === 'quickSort') {
+    //   this._router.navigate(['quick']);
+    // } else if (this.activeSortingMethod === 'mergeSort') {
+    //   this._router.navigate(['merge']);
+    // } else if (this.activeSortingMethod === 'selectionSort') {
+    //   this._router.navigate(['selection']);
+    // }
+    this.home.sort(this.activeSortingMethod);
     this.sortOptionsDisabled = true;
     this.generateDisabled = true;
     this.sliderDisabled = true;
   }
 
   onActivate(componentRef: any) {
-    componentRef.sort();
+    componentRef.sort(this.activeSortingMethod);
   }
 }
