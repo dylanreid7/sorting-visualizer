@@ -4,8 +4,8 @@
             Sorting Algorithm Visualizer
         </span>
         <button mat-flat-button (click)="generate()" color="accent" [disabled]="generateDisabled">Generate New Array</button>
-        <mat-slider (change)="updateNumBars($event)" min="10" max="500" step="10" [value]="numBars" [disabled]="sliderDisabled"></mat-slider>
-        <p>{{numBars}} Elements</p>
+        <mat-slider (change)="updateNumBars($event)" min="0" max="1" step=".01" [value]="sliderValue" [disabled]="sliderDisabled"></mat-slider>
+        <p>{{numElements}} Elements</p>
         <button mat-raised-button (click)="bubbleClick()" [color]="bubbleColor" [disabled]="sortOptionsDisabled">Bubble Sort</button>
         <button mat-raised-button (click)="quickClick()" [color]="quickColor" [disabled]="sortOptionsDisabled">Quick Sort</button>
         <button mat-raised-button (click)="mergeClick()" [color]="mergeColor" [disabled]="sortOptionsDisabled">Merge Sort</button>
@@ -13,7 +13,6 @@
         <button mat-raised-button (click)="sortClick()" color="accent" [disabled]="sortDisabled">Sort!</button>
     </mat-toolbar>
 </p>
-<!-- <router-outlet (activate)="onActivate($event)"></router-outlet> -->
 <app-home></app-home>
 
 

@@ -5,6 +5,7 @@ let animations: Animation[] = [];
 export default function getQuickAnimations(numList: number[]) {
     let tempList = numList.slice();
     quickSort(tempList, 0, tempList.length - 1);
+    addAnimation('complete', []);
     let tempAnimations = animations.slice();
     animations = [];
     return tempAnimations;
@@ -18,8 +19,6 @@ function quickSort(numList: number[], low: number,  high: number) {
 
         quickSort(numList, pi + 1, high);
     }
-
-    // console.log('numList: ', numList);
 }
 
 
@@ -30,60 +29,24 @@ function partition(numList: number[], low: number, high: number) {
     let j = low - 1;
   
     for (let i = low; i < high; i++) {
-        animations.push({
-            type: 'compare',
-            elements: [i, high],
-        });
+        addAnimation('compare', [i, high]);
+        addAnimation('returnColors', [i, high]);
         if (numList[i] < pivotValue) {
           j++;
           swap(numList, i, j);
-          animations.push({
-              'type': 'swap',
-              'elements': [i, j],
-          });
-          animations.push({
-              'type': 'returnColors',
-              'elements': [i, j],
-          });
-        }
-        animations.push({
-            'type': 'returnColors',
-            'elements': [i, high],
-        });
+          addAnimation('swap', [i, j]);
+          addAnimation('returnColors', [i, j]);
+        }  
     }
     swap(numList, j + 1, high);
-    animations.push({
-        'type': 'swap',
-        'elements': [j+ 1, high]
-    })
-    // create a function to check that all values to the left of the partition number are less than it, if so, it is considered sorted
+    addAnimation('swap', [j + 1, high]);
+    addAnimation('returnColors', [j + 1, high]);
+    
     if (isSorted(numList, high)) {
-        animations.push({
-            'type': 'sorted',
-            'elements': [high],
-        });
+        addAnimation('sorted', [high]);
     }
-
-
     return (j + 1);  
 }
-
-// function isSorted(numList: number[], elementNumber: number) {
-//     // create an array of elements to the left of element num
-//     const splicedList = numList.slice(0, elementNumber);
-//     // console.log('spliced: ', splicedList);
-//     const target = numList[elementNumber];
-//     for (let i = 0; i < splicedList.length; i++) {
-//         if (splicedList[i] > target) {
-//             return false;
-//         }
-//     }
-//     return true;
-//     // iterate through
-//         // if current num is greater than element num
-//             // return false
-//     // return true
-// }
 
 function isSorted(numList: number[], elementNumber: number) {
     if (elementNumber >= numList.length) {
@@ -102,4 +65,11 @@ function swap(numList: number[], firstIndex: number, secondIndex: number) {
   let temp = numList[firstIndex];
   numList[firstIndex] = numList[secondIndex];
   numList[secondIndex] = temp;
+}
+
+function addAnimation(type: string, elements: number[]) {
+    animations.push({
+        type,
+        elements
+    });
 }

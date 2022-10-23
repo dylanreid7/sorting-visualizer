@@ -5,6 +5,7 @@ let animations: Animation[] = [];
 export default function getSelectionAnimations(numList: number[]) {
     let tempList = numList.slice();
     selectionSort(tempList);
+    addAnimation('complete', []);
     let tempAnimations = animations.slice();
     animations = [];
     return tempAnimations;

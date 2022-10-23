@@ -10,6 +10,7 @@ const FRONT_COLOR = 'green';
 const BACK_COLOR = 'blue';
 const SWAP_COLOR = 'red';
 const SORTED_COLOR = 'purple';
+const FINISHED_COLOR = 'orange';
 
 @Component({
   selector: 'app-home',
@@ -18,9 +19,9 @@ const SORTED_COLOR = 'purple';
 })
 export class HomeComponent implements OnInit {
   numElements: number = 100;
-  timeDelay: number = 10;
   colors: string[] = [];
-  sorted: boolean[] = [];
+  barNumbers: number[] = [];
+  timeDelay: number = 10;
 
   constructor(private barService: BarServiceService) { }
 
@@ -28,7 +29,6 @@ export class HomeComponent implements OnInit {
     for(let i = 0; i < this.numElements; i++) {
       this.colors[i] = MAIN_COLOR;
     }
-    console.log('bar numbers: ', this.barNumbers);
   }
 
   barHeight(elementValue: number) {
@@ -37,16 +37,15 @@ export class HomeComponent implements OnInit {
     return height;
   }
 
-  get barNumbers(): number[] {
-    return this.barService.barNumbers;
-  }
+  // get barNumbers(): number[] {
+  //   return this.barService.barNumbers;
+  // }
 
   get barStyles(): any {
     return this.barService.barStyles;
   }
   
   sort(sortingMethod: string) {
-    console.log('og sort', sortingMethod);
     if (sortingMethod === 'bubble') {
       this.bubbleSort();
     } else if (sortingMethod === 'quick') {
@@ -65,299 +64,266 @@ export class HomeComponent implements OnInit {
     return elementColor === SORTED_COLOR;
   }
 
-  selectionSort() {
-      let barNumbers = this.barNumbers;
-      console.log('bar nums in sele: ', barNumbers);
-      console.log('running seelction sort');
-      let animations = getSelectionAnimations(barNumbers);
-      console.log('selection animations', animations);
-      let bars = document.getElementsByClassName('bar');
-      this.timeDelay = this.barService.timeDelay;
-      // let swapCount = 0;
-      // iterate through the animations
-        // check type
-          // do the proper animation with that type
-      // let sortedTracker = 0;
-      for (let i = 0; i < animations.length; i++) {
-        let type = animations[i].type;
-        let elementNumbers = animations[i].elements;
-        let elOne = elementNumbers[0];
-        let elTwo = elementNumbers[1];
-        
-        console.log('elOne: ', elOne);
-        if (type === 'compare') {
-          'comp';
-          setTimeout(() => {
-            let elementOne = <HTMLElement>bars[elOne];
-        let elementTwo = <HTMLElement>bars[elTwo];
-            elementOne.style.backgroundColor = FRONT_COLOR;
-            elementTwo.style.backgroundColor = BACK_COLOR;
-          }, this.timeDelay * i);
-        } else if (type === 'swap') {
-          setTimeout(() => {
-            let elementOne = <HTMLElement>bars[elOne];
-        let elementTwo = <HTMLElement>bars[elTwo];
-            elementOne.style.backgroundColor = SWAP_COLOR;
-            elementTwo.style.backgroundColor = SWAP_COLOR;
-            let tempHeight = elementOne.style.height;
-            elementOne.style.height = elementTwo.style.height;
-            elementTwo.style.height = tempHeight;
-          }, this.timeDelay * i);
-        } else if (type === 'returnColors') {
-          setTimeout(() => {
-            let elementOne = <HTMLElement>bars[elOne];
-
-            
-            elementOne.style.backgroundColor = MAIN_COLOR;
-            if (elTwo) {
-              let elementTwo = <HTMLElement>bars[elTwo];
-              elementTwo.style.backgroundColor = MAIN_COLOR;
-            }
-             
-          }, this.timeDelay * i);
-        } else if (type === 'sorted') {
-          setTimeout(() => {
-            let elementOne = <HTMLElement>bars[elOne];
-        
-            elementOne.style.backgroundColor = SORTED_COLOR;
-          }, this.timeDelay * i);
-        }
-      }
-  }
-
   bubbleSort() {
-    console.log('bubble sort!!');
-    let barNumbers = this.barService.getBars();
-    let animations = getBubbleAnimations(barNumbers);
+    this.barNumbers = this.barService.getBars();
+    let animations = getBubbleAnimations(this.barNumbers);
     let bars = document.getElementsByClassName('bar');
     this.timeDelay = this.barService.timeDelay;
-    console.log('time delay ', this.timeDelay);
-    let swapCount = 0;
     const length = bars.length;
+    let sorted: boolean[] = Array(length).fill(false);
     
     for (let i = 0; i < animations.length; i++) {
       let type = animations[i].type;
       let elementNumbers = animations[i].elements;
-      let elOne = elementNumbers[0];
-      let elTwo = elementNumbers[1];
+      let elementOne = <HTMLElement>bars[elementNumbers[0]];
+      let elementTwo = <HTMLElement>bars[elementNumbers[1]];
       if (type === 'compare') {
         setTimeout(() => {
-          let elementOne = <HTMLElement>bars[elOne];
-          let elementTwo = <HTMLElement>bars[elTwo];
-          if (elOne < length - swapCount - 1) {
+          if (!sorted[elementNumbers[0]]) {
             elementOne.style.backgroundColor = FRONT_COLOR;
           }
-          if (elTwo < length - swapCount - 1) {
+          if (!sorted[elementNumbers[1]]) {
             elementTwo.style.backgroundColor = BACK_COLOR;
           }
-        }, this.timeDelay * i);
+        }, timeDelay * i);
       }
       if (type === 'swap') {    
         setTimeout(() => {
-          let elementOne = <HTMLElement>bars[elementNumbers[0]];
-          let elementTwo = <HTMLElement>bars[elementNumbers[1]];
-          let elementOneHeight = elementOne.style.height;
-          let elementTwoHeight = elementTwo.style.height;
-          
-          elementOne.style.height = elementTwoHeight;
-          elementTwo.style.height = elementOneHeight;
-          if (elOne < length - swapCount - 1) {
+          let tempHeight = elementOne.style.height;          
+          elementOne.style.height = elementTwo.style.height;
+          elementTwo.style.height = tempHeight;
+          if (!sorted[elementNumbers[0]]) {
             elementOne.style.backgroundColor = SWAP_COLOR;
           }
-          if (elTwo < length - swapCount - 1) {
+          if (!sorted[elementNumbers[1]]) {
             elementTwo.style.backgroundColor = SWAP_COLOR;
           }
-        }, this.timeDelay * i);
+        }, timeDelay * i);
       }
       if (type === 'returnColors') {
         setTimeout(() => {
-          let elementOne = <HTMLElement>bars[elementNumbers[0]];
-          let elementTwo = <HTMLElement>bars[elementNumbers[1]];
-          if (elOne < length - swapCount - 1) {
+          if (!sorted[elementNumbers[0]]) {
             elementOne.style.backgroundColor = MAIN_COLOR;
           }
-          if (elTwo < length - swapCount - 1) {
-              elementTwo.style.backgroundColor = MAIN_COLOR;
-          }
-        }, this.timeDelay * i);
-      }
-      if (type === 'sorted') {
-        let elementOne = <HTMLElement>bars[elementNumbers[0]];
-
-        setTimeout(() => {
-          elementOne.style.backgroundColor = SORTED_COLOR;
-          swapCount++;
-        }, this.timeDelay * i);
-      }
-    }
-  }
-
-
-  mergeSort() {
-    let barNumbers = this.barService.getBars();
-    console.log('merge sort!!');
-    let animations = getMergeAnimations(this.barNumbers);
-    this.timeDelay = this.barService.timeDelay;
-
-    for (let i = 0; i < animations.length; i++) {
-      let type = animations[i].type;
-      let elOne = animations[i].elements[0];
-      let elTwo = animations[i].elements[1];
-      let bars = document.getElementsByClassName('bar');
-      let elementOne = <HTMLElement>bars[elOne];
-      let elementTwo = <HTMLElement>bars[elTwo];
-      if (type === 'compare') {
-        setTimeout(() => {
-          if (!this.sorted[elOne]) {
-            elementOne.style.backgroundColor = FRONT_COLOR;
-          }
-          if (!this.sorted[elTwo]) {
-            elementTwo.style.backgroundColor = BACK_COLOR;
-          }
-        }, this.timeDelay * 10);
-      } else if (type === 'swap') {
-        setTimeout(() => {
-          // console.log('elOne: ', elOne);
-          // console.log('elTwo: ', elTwo);
-          // console.log('typeof eltwo: ', typeof elTwo);
-          // color element one with swap color
-          if (!this.sorted[elOne]) {
-            elementOne.style.backgroundColor = SWAP_COLOR;
-          }
-          if (elTwo === 0) {
-            return;
-          }
-          // create temp element one height
-          let tempHeight: string = elementOne.style.height;
-          // console.log('tempHeight: ', tempHeight);
-          // console.log('type of temp', typeof tempHeight);
-          // put element two height in element ones spot
-          elementOne.style.height = elementTwo.style.height;
-          // iterate through, up to end
-          const numToShift = animations[i].elements[2];
-          let nextTempHeight: string = '';
-          for (let j = elOne; j < elTwo; j++) {
-            let currentEl = <HTMLElement>bars[j];
-            let nextEl = <HTMLElement>bars[j + 1];
-            let nextTempHeight = nextEl.style.height;
-            // if j < animations[i].elmements[2]
-            // if (j < numToShift) {
-            //   nextTempHeight = currentElement.style.height;
-            // }
-            nextEl.style.height = tempHeight;
-            tempHeight = nextTempHeight;
-          }
-            // if j = 0
-              // currentTempHeight = tempHeight
-            // else
-              // currentTempHeight = nextTempHeight
-            //  nextTempHeight = j + 2 height
-            // place currentTempHeight into 
-            // save next element
-
-          if (!this.sorted[elOne]) {
-            elementOne.style.backgroundColor = SWAP_COLOR;
-          }
-          if (!this.sorted[elTwo]) {
-            elementTwo.style.backgroundColor = SWAP_COLOR;
-          }
-          // elementOne.style.height = elementTwo.style.height;
-          // elementTwo.style.height = tempHeight;
-        }, this.timeDelay * 10);
-
-      } else if (type === 'returnColors') {
-        setTimeout(() => {
-          if (elementOne && !this.sorted[elOne]) {
-            elementOne.style.backgroundColor = MAIN_COLOR;
-          }
-          if (elementTwo && !this.sorted[elTwo]) {
+          if (!sorted[elementNumbers[1]]) {
             elementTwo.style.backgroundColor = MAIN_COLOR;
           }
-        }, this.timeDelay * 10);
-      } else if (type === 'sorted') {
+        }, timeDelay * i);
+      }
+      if (type === 'sorted') {
         setTimeout(() => {
           elementOne.style.backgroundColor = SORTED_COLOR;
-          // elementTwo.style.backgroundColor = SORTED_COLOR;
-          this.sorted[elOne] = true;
-          // this.sorted[elTwo] = true;
-          // console.log('sorted: ', this.sorted);
-        }, this.timeDelay * 10);
+          sorted[elementNumbers[0]] = true;
+        }, timeDelay * i);
+      }
+      if (type === 'complete') {
+        setTimeout(() => {
+          for(let i = 0; i < length; i++) {
+            let element = <HTMLElement>bars[i];
+            element.style.background = FINISHED_COLOR;
+          }
+        }, timeDelay * i);
       }
     }
   }
 
   quickSort() {
     let barNumbers = this.barNumbers;
-    console.log('running quick sort');
     let animations = getQuickAnimations(barNumbers);
     let bars = document.getElementsByClassName('bar');
-    this.timeDelay = this.barService.timeDelay;
-    let swapCount = 0;
-    // iterate through the animations
-      // check type
-        // do the proper animation with that type
+    let sorted: boolean[] = Array(length).fill(false);
     let sortedTracker = 0;
+    let delay = this.barService.timeDelay;
+    
     for (let i = 0; i < animations.length; i++) {
       let type = animations[i].type;
       let elementNumbers = animations[i].elements;
-      let elOne = elementNumbers[0];
-      let elTwo = elementNumbers[1];
-
-      if (type === 'compare ') {
+      let elementOne = <HTMLElement>bars[elementNumbers[0]];
+      let elementTwo = <HTMLElement>bars[elementNumbers[1]];
+      if (type === 'compare') {
         setTimeout(() => {
-          if (elOne > sortedTracker) {
-            let elementOne = <HTMLElement>bars[elOne];
+          if (!sorted[elementNumbers[0]]) {
             elementOne.style.backgroundColor = FRONT_COLOR;
           }
-          if (elTwo > sortedTracker) {
-            let elementTwo = <HTMLElement>bars[elTwo];
+          if (!sorted[elementNumbers[1]]) {
             elementTwo.style.backgroundColor = BACK_COLOR;
           }
-        }, this.timeDelay * i);
+        }, delay * i);
       } else if (type === 'swap') {
         setTimeout(() => {
-          
-          let elementOne = <HTMLElement>bars[elOne];
-          let elementTwo = <HTMLElement>bars[elTwo];
-          let elementOneHeight = elementOne.style.height;
-          let elementTwoHeight = elementTwo.style.height;
-          
-          elementOne.style.height = elementTwoHeight;
-          elementTwo.style.height = elementOneHeight;   
-          
+          let tempHeight = elementOne.style.height;          
+          elementOne.style.height = elementTwo.style.height;
+          elementTwo.style.height = tempHeight;
+          if (!sorted[elementNumbers[0]]) {
             elementOne.style.backgroundColor = SWAP_COLOR;
+          }
+          if (!sorted[elementNumbers[1]]) {
             elementTwo.style.backgroundColor = SWAP_COLOR;
-        }, this.timeDelay * i);
+          }
+        }, delay * i);
         
       } else if (type === 'returnColors') {
         setTimeout(() => {
-          // if (elOne > sortedTracker) {
-            let elementOne = <HTMLElement>bars[elementNumbers[0]];
+          if (!sorted[elementNumbers[0]]) {
             elementOne.style.backgroundColor = MAIN_COLOR;
-          // }
-          // if (elTwo > sortedTracker) {
-            let elementTwo = <HTMLElement>bars[elementNumbers[1]];
+          }
+          if (!sorted[elementNumbers[1]]) {
             elementTwo.style.backgroundColor = MAIN_COLOR;
-          // }  
-        }, this.timeDelay * i);
+          }
+        }, delay * i);
       } else if (type === 'sorted') {
-        // console.log('sorted: ', elOne);
-        let elementOne = <HTMLElement>bars[elementNumbers[0]];
-        if (sortedTracker < elOne) {
-          sortedTracker = elOne;
+        // let elementOne = <HTMLElement>bars[elementNumbers[0]];
+        if (sortedTracker < elementNumbers[0]) {
+          sortedTracker = elementNumbers[0];
+        } else {
+          continue;
         }
-        
         setTimeout(() => {
-          for(let i = 0; i <= elOne; i++) {
+          for(let i = 0; i <= elementNumbers[0]; i++) {
             let element = <HTMLElement>bars[i];
             element.style.background = SORTED_COLOR;
+            sorted[i] = true;
           }
-          // elementOne.style.backgroundColor = SORTED_COLOR;
-          // swapCount++;
-        }, this.timeDelay * i);
+        }, delay * i);
+      } else if (type === 'complete') {
+        setTimeout(() => {
+          for (let i = 0; i < bars.length; i++) {
+            let currentElement = <HTMLElement>bars[i];
+            currentElement.style.backgroundColor = FINISHED_COLOR;
+          }
+        }, delay * i);
+    }
+    }
+  }
+
+  mergeSort() {
+    let barNumbers = this.barService.getBars();
+    let animations = getMergeAnimations(barNumbers);
+    let timeDelay = this.barService.timeDelay;
+    let sorted: boolean[] = Array(length).fill(false);
+
+    for (let i = 0; i < animations.length; i++) {
+      let type = animations[i].type;
+      let elementNumbers = animations[i].elements;
+      let bars = document.getElementsByClassName('bar');
+      let elementOne = <HTMLElement>bars[elementNumbers[0]];
+      let elementTwo = <HTMLElement>bars[elementNumbers[1]];
+      if (type === 'compare') {
+        setTimeout(() => {
+          if (!sorted[elementNumbers[0]]) {
+            elementOne.style.backgroundColor = FRONT_COLOR;
+          }
+          if (!sorted[elementNumbers[1]]) {
+            elementTwo.style.backgroundColor = BACK_COLOR;
+          }
+        }, timeDelay * i);
+      } else if (type === 'swap') {
+        setTimeout(() => {
+          if (!sorted[elementNumbers[0]]) {
+            elementOne.style.backgroundColor = SWAP_COLOR;
+          }
+          if (!elementNumbers[1]) {
+            return;
+          }
+          let tempHeight: string = elementOne.style.height;
+          elementOne.style.height = elementTwo.style.height;
+          for (let j = elementNumbers[0]; j < elementNumbers[1]; j++) {
+            let nextEl = <HTMLElement>bars[j + 1];
+            let nextTempHeight = nextEl.style.height;
+            nextEl.style.height = tempHeight;
+            tempHeight = nextTempHeight;
+          }
+          if (!sorted[elementNumbers[0]]) {
+            elementOne.style.backgroundColor = SWAP_COLOR;
+          }
+          if (!sorted[elementNumbers[1]]) {
+            elementTwo.style.backgroundColor = SWAP_COLOR;
+          }
+        }, timeDelay * i);
+      } else if (type === 'returnColors') {
+        setTimeout(() => {
+          if (elementOne && !sorted[elementNumbers[0]]) {
+            elementOne.style.backgroundColor = MAIN_COLOR;
+          }
+          if (elementTwo && !sorted[elementNumbers[1]]) {
+            elementTwo.style.backgroundColor = MAIN_COLOR;
+          }
+        }, timeDelay * i);
+      } else if (type === 'sorted') {
+        setTimeout(() => {
+          elementOne.style.backgroundColor = SORTED_COLOR;
+          sorted[elementNumbers[0]] = true;
+        }, timeDelay * i);
+      } else if (type === 'complete') {
+          setTimeout(() => {
+            for (let i = 0; i < bars.length; i++) {
+              let currentElement = <HTMLElement>bars[i];
+              currentElement.style.backgroundColor = FINISHED_COLOR;
+            }
+          }, timeDelay * i);
       }
     }
-    // console.log('sorted tracker: ', sortedTracker);
   }
+
+  selectionSort() {
+    let barNumbers = this.barNumbers;
+    let animations = getSelectionAnimations(barNumbers);
+    let bars = document.getElementsByClassName('bar');
+    let timeDelay = this.barService.timeDelay;
+    for (let i = 0; i < animations.length; i++) {
+      let type = animations[i].type;
+      let elementNumbers = animations[i].elements;
+      let elementOne = <HTMLElement>bars[elementNumbers[0]];
+      let elementTwo = <HTMLElement>bars[elementNumbers[1]];
+      if (type === 'compare') {
+        'comp';
+        setTimeout(() => {
+          elementOne.style.backgroundColor = FRONT_COLOR;
+          elementTwo.style.backgroundColor = BACK_COLOR;
+        }, timeDelay * i);
+      } else if (type === 'swap') {
+        setTimeout(() => {
+          let tempHeight = elementOne.style.height;
+          elementOne.style.height = elementTwo.style.height;
+          elementTwo.style.height = tempHeight;
+          elementOne.style.backgroundColor = SWAP_COLOR;
+          elementTwo.style.backgroundColor = SWAP_COLOR;  
+        }, timeDelay * i);
+      } else if (type === 'returnColors') {
+        setTimeout(() => {
+          elementOne.style.backgroundColor = MAIN_COLOR;
+          if (elementTwo) {
+            elementTwo.style.backgroundColor = MAIN_COLOR;
+          }
+        }, timeDelay * i);
+      } else if (type === 'sorted') {
+        setTimeout(() => {
+          elementOne.style.backgroundColor = SORTED_COLOR;
+        }, timeDelay * i);
+      } else if (type === 'complete') {
+        setTimeout(() => {
+          for (let i = 0; i < bars.length; i++) {
+            let currentElement = <HTMLElement>bars[i];
+            currentElement.style.backgroundColor = FINISHED_COLOR;
+          }
+        }, timeDelay * i);
+      }
+    }
+  }
+
+  compareElements(elements: number[]) {
+    // set colors to main color
+  }
+
+  swapElements(elements: number[]) {
+    // swap heights
+    // set them to swap color
+  }
+
+  returnElementColors(elements: number[]) {
+
+  }
+
+
 
 }

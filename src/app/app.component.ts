@@ -10,9 +10,8 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit {
   barNumbers: number[] = [];
-
-
-  numBars: number = 100;
+  sliderValue: number = 0.5;
+  numElements: number = 100;
   generateDisabled: boolean = false;
   generatePressed: boolean = false;
   sortOptionsDisabled: boolean = false;
@@ -35,11 +34,24 @@ export class AppComponent implements OnInit {
   }
   
   updateNumBars(event: any) {
-    this.numBars = event.value;
-    this.barService.setNumElements(event.value);
+    this.sliderValue = event.value;
+    this.numElements = this.convertSliderToNumElements(this.sliderValue); 
+    this.barService.setNumElements(this.numElements);
     this.barService.generateArray();
   }
 
+  convertSliderToNumElements(value: number) {
+    if (value < 0.5) {
+      let unrounded = 180 * value + 10;
+      let rounded = unrounded - (unrounded % 10);
+      return rounded;
+    } else {
+      let unrounded = 800 * value - 300;
+      let rounded = unrounded - (unrounded % 10);
+      return rounded;
+    }
+  }
+ 
   generate() {
     this.barNumbers = this.barService.generateArray();
   }
@@ -81,15 +93,6 @@ export class AppComponent implements OnInit {
   }
 
   sortClick() {
-    // if (this.activeSortingMethod === 'bubbleSort') {
-    //   this._router.navigate(['bubble']);
-    // } else if (this.activeSortingMethod === 'quickSort') {
-    //   this._router.navigate(['quick']);
-    // } else if (this.activeSortingMethod === 'mergeSort') {
-    //   this._router.navigate(['merge']);
-    // } else if (this.activeSortingMethod === 'selectionSort') {
-    //   this._router.navigate(['selection']);
-    // }
     this.home.sort(this.activeSortingMethod);
     this.sortOptionsDisabled = true;
     this.generateDisabled = true;
