@@ -59,7 +59,7 @@ export class BarServiceService {
   }
 
   get timeDelay() {
-    return 1000 / this.numElements;
+    return 100 / this.numElements;
   }
 
 }

@@ -129,116 +129,88 @@ export class HomeComponent implements OnInit {
   }
 
   mergeSort() {
-    let barNumbers = this.barService.getBars();
-    let animations = getMergeAnimations(barNumbers);
-    let timeDelay = this.barService.timeDelay;
-    let sorted: boolean[] = Array(length).fill(false);
+
+    let animations = getMergeAnimations(this.barNumbers);
+    this.bars = document.getElementsByClassName('bar');
+    this.timeDelay = this.barService.timeDelay;
+    this.sorted = Array(this.bars.length).fill(false);
 
     for (let i = 0; i < animations.length; i++) {
       let type = animations[i].type;
-      let elementNumbers = animations[i].elements;
-      let bars = document.getElementsByClassName('bar');
-      let elementOne = <HTMLElement>bars[elementNumbers[0]];
-      let elementTwo = <HTMLElement>bars[elementNumbers[1]];
+      let elements = animations[i].elements;
+      // let bars = document.getElementsByClassName('bar');
+      
       if (type === 'compare') {
-        setTimeout(() => {
-          if (!sorted[elementNumbers[0]]) {
-            elementOne.style.backgroundColor = FRONT_COLOR;
-          }
-          if (!sorted[elementNumbers[1]]) {
-            elementTwo.style.backgroundColor = BACK_COLOR;
-          }
-        }, timeDelay * i);
+        this.compareElements(elements, i);
       } else if (type === 'swap') {
+        
         setTimeout(() => {
-          if (!sorted[elementNumbers[0]]) {
-            elementOne.style.backgroundColor = SWAP_COLOR;
-          }
-          if (!elementNumbers[1]) {
-            return;
-          }
+          let elementOne = <HTMLElement>this.bars[elements[0]];
+          let elementTwo = <HTMLElement>this.bars[elements[1]];
+          // if (!this.sorted[elements[0]]) {
+          //   elementOne.style.backgroundColor = SWAP_COLOR;
+          // }
+          // if (!elements[1]) {
+          //   return;
+          // }
           let tempHeight: string = elementOne.style.height;
           elementOne.style.height = elementTwo.style.height;
-          for (let j = elementNumbers[0]; j < elementNumbers[1]; j++) {
-            let nextEl = <HTMLElement>bars[j + 1];
+          for (let j = elements[0]; j < elements[1]; j++) {
+            let nextEl = <HTMLElement>this.bars[j + 1];
             let nextTempHeight = nextEl.style.height;
             nextEl.style.height = tempHeight;
             tempHeight = nextTempHeight;
           }
-          if (!sorted[elementNumbers[0]]) {
-            elementOne.style.backgroundColor = SWAP_COLOR;
+          // if (!this.sorted[elements[0]]) {
+          //   elementOne.style.backgroundColor = SWAP_COLOR;
+          // }
+          // if (!this.sorted[elements[1]]) {
+          //   elementTwo.style.backgroundColor = SWAP_COLOR;
+          // }
+          let colorsToSort: number[] = [];
+        elements.forEach((element) => {
+          if (!this.sorted[element]) {
+            colorsToSort.push(element);
           }
-          if (!sorted[elementNumbers[1]]) {
-            elementTwo.style.backgroundColor = SWAP_COLOR;
-          }
-        }, timeDelay * i);
+        })
+          colorsToSort.forEach((element) => {
+            let currentElement = <HTMLElement>this.bars[element];
+            currentElement.style.backgroundColor = SWAP_COLOR;
+          });
+        }, this.timeDelay * i);
       } else if (type === 'returnColors') {
-        setTimeout(() => {
-          if (elementOne && !sorted[elementNumbers[0]]) {
-            elementOne.style.backgroundColor = MAIN_COLOR;
-          }
-          if (elementTwo && !sorted[elementNumbers[1]]) {
-            elementTwo.style.backgroundColor = MAIN_COLOR;
-          }
-        }, timeDelay * i);
+        this.returnElementColors(elements, i);
       } else if (type === 'sorted') {
-        setTimeout(() => {
-          elementOne.style.backgroundColor = SORTED_COLOR;
-          sorted[elementNumbers[0]] = true;
-        }, timeDelay * i);
+        this.sortElements(elements, i);
       } else if (type === 'complete') {
-          setTimeout(() => {
-            for (let i = 0; i < bars.length; i++) {
-              let currentElement = <HTMLElement>bars[i];
-              currentElement.style.backgroundColor = FINISHED_COLOR;
-            }
-          }, timeDelay * i);
+        this.complete(i);
       }
     }
   }
 
   selectionSort() {
-    let barNumbers = this.barNumbers;
-    let animations = getSelectionAnimations(barNumbers);
-    let bars = document.getElementsByClassName('bar');
-    let timeDelay = this.barService.timeDelay;
+    let animations = getSelectionAnimations(this.barNumbers);
+    this.bars = document.getElementsByClassName('bar');
+    this.timeDelay = this.barService.timeDelay;
+    this.sorted = Array(this.bars.length).fill(false);
+    
     for (let i = 0; i < animations.length; i++) {
       let type = animations[i].type;
-      let elementNumbers = animations[i].elements;
-      let elementOne = <HTMLElement>bars[elementNumbers[0]];
-      let elementTwo = <HTMLElement>bars[elementNumbers[1]];
+      let elements = animations[i].elements;
       if (type === 'compare') {
-        'comp';
-        setTimeout(() => {
-          elementOne.style.backgroundColor = FRONT_COLOR;
-          elementTwo.style.backgroundColor = BACK_COLOR;
-        }, timeDelay * i);
-      } else if (type === 'swap') {
-        setTimeout(() => {
-          let tempHeight = elementOne.style.height;
-          elementOne.style.height = elementTwo.style.height;
-          elementTwo.style.height = tempHeight;
-          elementOne.style.backgroundColor = SWAP_COLOR;
-          elementTwo.style.backgroundColor = SWAP_COLOR;  
-        }, timeDelay * i);
-      } else if (type === 'returnColors') {
-        setTimeout(() => {
-          elementOne.style.backgroundColor = MAIN_COLOR;
-          if (elementTwo) {
-            elementTwo.style.backgroundColor = MAIN_COLOR;
-          }
-        }, timeDelay * i);
-      } else if (type === 'sorted') {
-        setTimeout(() => {
-          elementOne.style.backgroundColor = SORTED_COLOR;
-        }, timeDelay * i);
-      } else if (type === 'complete') {
-        setTimeout(() => {
-          for (let i = 0; i < bars.length; i++) {
-            let currentElement = <HTMLElement>bars[i];
-            currentElement.style.backgroundColor = FINISHED_COLOR;
-          }
-        }, timeDelay * i);
+        this.compareElements(elements, i);
+      }
+      if (type === 'swap') {    
+        this.swapElements(elements, i);
+      }
+      if (type === 'returnColors') {
+        this.returnElementColors(elements, i);
+      }
+      if (type === 'sorted') {
+        this.sortElements(elements, i);
+      }
+      if (type === 'complete') {
+        this.complete(i);
       }
     }
   }
