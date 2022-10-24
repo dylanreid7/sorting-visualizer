@@ -66,8 +66,6 @@ export class HomeComponent implements OnInit {
     return elementColor === SORTED_COLOR;
   }
 
-  
-
   bubbleSort() {
     let animations = getBubbleAnimations(this.barNumbers);
     this.bars = document.getElementsByClassName('bar');
@@ -129,7 +127,6 @@ export class HomeComponent implements OnInit {
   }
 
   mergeSort() {
-
     let animations = getMergeAnimations(this.barNumbers);
     this.bars = document.getElementsByClassName('bar');
     this.timeDelay = this.barService.timeDelay;
@@ -138,46 +135,10 @@ export class HomeComponent implements OnInit {
     for (let i = 0; i < animations.length; i++) {
       let type = animations[i].type;
       let elements = animations[i].elements;
-      // let bars = document.getElementsByClassName('bar');
-      
       if (type === 'compare') {
         this.compareElements(elements, i);
       } else if (type === 'swap') {
-        
-        setTimeout(() => {
-          let elementOne = <HTMLElement>this.bars[elements[0]];
-          let elementTwo = <HTMLElement>this.bars[elements[1]];
-          // if (!this.sorted[elements[0]]) {
-          //   elementOne.style.backgroundColor = SWAP_COLOR;
-          // }
-          // if (!elements[1]) {
-          //   return;
-          // }
-          let tempHeight: string = elementOne.style.height;
-          elementOne.style.height = elementTwo.style.height;
-          for (let j = elements[0]; j < elements[1]; j++) {
-            let nextEl = <HTMLElement>this.bars[j + 1];
-            let nextTempHeight = nextEl.style.height;
-            nextEl.style.height = tempHeight;
-            tempHeight = nextTempHeight;
-          }
-          // if (!this.sorted[elements[0]]) {
-          //   elementOne.style.backgroundColor = SWAP_COLOR;
-          // }
-          // if (!this.sorted[elements[1]]) {
-          //   elementTwo.style.backgroundColor = SWAP_COLOR;
-          // }
-          let colorsToSort: number[] = [];
-        elements.forEach((element) => {
-          if (!this.sorted[element]) {
-            colorsToSort.push(element);
-          }
-        })
-          colorsToSort.forEach((element) => {
-            let currentElement = <HTMLElement>this.bars[element];
-            currentElement.style.backgroundColor = SWAP_COLOR;
-          });
-        }, this.timeDelay * i);
+        this.mergeSwapElements(elements, i);
       } else if (type === 'returnColors') {
         this.returnElementColors(elements, i);
       } else if (type === 'sorted') {
@@ -253,6 +214,40 @@ export class HomeComponent implements OnInit {
     }, this.timeDelay * iteration);
   }
 
+  mergeSwapElements(elements: number[], iteration: number) {
+    let elementOne = <HTMLElement>this.bars[elements[0]];
+    if (elements.length < 2) {
+      if (!this.sorted[elements[0]]) {
+        setTimeout(() => {
+          elementOne.style.backgroundColor = SWAP_COLOR; 
+        }, this.timeDelay * iteration);
+      }
+    } else {
+      let elementTwo = <HTMLElement>this.bars[elements[1]];
+      let colorsToSort: number[] = [];
+      elements.forEach((element) => {
+        if (!this.sorted[element]) {
+          colorsToSort.push(element);
+        }
+      });
+      
+      setTimeout(() => {
+        let tempHeight: string = elementOne.style.height;
+        elementOne.style.height = elementTwo.style.height;
+        for (let j = elements[0]; j < elements[1]; j++) {
+          let nextEl = <HTMLElement>this.bars[j + 1];
+          let nextTempHeight = nextEl.style.height;
+          nextEl.style.height = tempHeight;
+          tempHeight = nextTempHeight;
+        }
+        colorsToSort.forEach((element) => {
+          let currentElement = <HTMLElement>this.bars[element];
+          currentElement.style.backgroundColor = SWAP_COLOR;
+        });
+      }, this.timeDelay * iteration);
+    }
+  }
+
   returnElementColors(elements: number[], iteration: number) {
     let elementsToColor: number[] = [];
     elements.forEach((element) => {
@@ -269,7 +264,6 @@ export class HomeComponent implements OnInit {
   }
 
   sortElements(elements: number[], iteration: number) {
-    let elementOne = <HTMLElement>this.bars[elements[0]];
     elements.forEach((num) => {this.sorted[num] = true;})
     setTimeout(() => {
       elements.forEach((num) => {

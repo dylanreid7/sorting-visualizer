@@ -34,39 +34,45 @@ function merge(numList: number[], left: number, mid: number, right: number) {
     let rightIndex = 0;
 
     while (index <= right) {
-      addAnimation('compare', [leftIndex + left, rightIndex + mid + 1]);
-      addAnimation('returnColors', [leftIndex + left, rightIndex + mid + 1]);
-      let placementIndex: number, numElementsToShift: number;
-      let indexFrom: any = null;
+    if (rightIndex < rightList.length) {
+        addAnimation('compare', [leftIndex + left, rightIndex + mid + 1]);
+        addAnimation('returnColors', [leftIndex + left, rightIndex + mid + 1]);
+    }
+      let placementIndex: number, elements: number[];
+      
       if (!leftList[leftIndex]) {
-        numList[index] = rightList[rightIndex];
+        numList[index] = rightList[rightIndex]; 
         rightIndex++;
         placementIndex = index;
-        numElementsToShift = 0;
+        // numElementsToShift = 0;
+        elements = [placementIndex];
       }
       else if (!rightList[rightIndex]) {
         numList[index] = leftList[leftIndex];
         leftIndex++;
         placementIndex = index;
-        numElementsToShift = 0;
+        elements = [placementIndex];
+        // numElementsToShift = 0;
       }
       else if (leftList[leftIndex] < rightList[rightIndex]) {
         numList[index] = leftList[leftIndex];
         leftIndex++;
         placementIndex = index;
-        numElementsToShift = 0;
+        elements = [placementIndex];
+        // numElementsToShift = 0;
       } else {
         numList[index] = rightList[rightIndex];
         placementIndex = index;
-        indexFrom = right - (rightList.length - 1 - rightIndex);
+        let indexFrom = right - (rightList.length - 1 - rightIndex);
         rightIndex++;
-        numElementsToShift = (leftList.length - leftIndex - 1) + (rightList.length - rightIndex - 1);
+        elements = [placementIndex, indexFrom];
+        // numElementsToShift = (leftList.length - leftIndex - 1) + (rightList.length - rightIndex - 1);
       }
-      addAnimation('swap', [placementIndex, indexFrom, numElementsToShift]);
-      addAnimation('returnColors', [placementIndex, indexFrom]);
+      addAnimation('swap', elements);
+      addAnimation('returnColors', elements);
       if (isSorted(numList, index)) {
         addAnimation('sorted', [index]);
-    };
+      }
       index++;
     }
     
