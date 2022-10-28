@@ -11,7 +11,6 @@ export class BarServiceService {
 
   setNumElements(num: number) {
     this.numElements = num;
-    console.log('num elements', this.numElements);
   }
 
   generateArray() {
@@ -31,7 +30,7 @@ export class BarServiceService {
   }
 
   barHeight(elementValue: number) {
-    // 70% of 100 vh times elementValue
+    // 60% of 100 vh times elementValue
     const numHeight = 0.6 * 0.1 * elementValue;
     const height = `${numHeight}vh`;
     return height;

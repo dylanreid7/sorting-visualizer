@@ -11,8 +11,9 @@
         <button mat-raised-button (click)="mergeClick()" [color]="mergeColor" [disabled]="sortOptionsDisabled">Merge Sort</button>
         <button mat-raised-button (click)="selectionClick()" [color]="selectionColor" [disabled]="sortOptionsDisabled">Selection Sort</button>
         <button mat-raised-button (click)="sortClick()" color="accent" [disabled]="sortDisabled">Sort!</button>
+        <button *ngIf="resetButtonActive" mat-raised-button (click)="resetClick()">Reset</button>
     </mat-toolbar>
 </p>
-<app-home></app-home>
+<app-home (resetEvent)="resetChange($event)"></app-home>
 
 

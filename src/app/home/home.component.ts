@@ -1,5 +1,5 @@
 import { BarServiceService } from './../bar-service.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import getSelectionAnimations from 'src/algorithms/selectionSort';
 import getBubbleAnimations from 'src/algorithms/bubbleSort';
 import getMergeAnimations from 'src/algorithms/mergeSort';
@@ -20,10 +20,10 @@ const FINISHED_COLOR = 'orange';
 export class HomeComponent implements OnInit {
   numElements: number = 100;
   colors: string[] = [];
-  // barNumbers: number[] = this.barService.barNumbers;
   timeDelay: number = 10;
   sorted: boolean[] = [];
   bars: any = null;
+  @Output() resetEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(private barService: BarServiceService) { }
 
@@ -91,6 +91,9 @@ export class HomeComponent implements OnInit {
         this.complete(i);
       }
     }
+    setTimeout(() => {
+      this.resetEvent.emit(true);
+    }, this.timeDelay * animations.length);
   }
 
   quickSort() {
@@ -124,6 +127,9 @@ export class HomeComponent implements OnInit {
         this.complete(i);
       }
     }
+    setTimeout(() => {
+      this.resetEvent.emit(true);
+    }, this.timeDelay * animations.length);
   }
 
   mergeSort() {
@@ -147,6 +153,9 @@ export class HomeComponent implements OnInit {
         this.complete(i);
       }
     }
+    setTimeout(() => {
+      this.resetEvent.emit(true);
+    }, this.timeDelay * animations.length);
   }
 
   selectionSort() {
@@ -174,6 +183,9 @@ export class HomeComponent implements OnInit {
         this.complete(i);
       }
     }
+    setTimeout(() => {
+      this.resetEvent.emit(true);
+    }, this.timeDelay * animations.length);
   }
 
   compareElements(elements: number[], iteration: number) {
@@ -282,4 +294,11 @@ export class HomeComponent implements OnInit {
     }, this.timeDelay * iteration);
   }
 
+  reset() {
+    this.bars = document.getElementsByClassName('bar');
+    for (let i = 0; i < this.bars.length; i++) {
+      let currentBar = <HTMLElement>this.bars[i];
+      currentBar.style.backgroundColor = 'turquoise';
+    }
+  }
 }

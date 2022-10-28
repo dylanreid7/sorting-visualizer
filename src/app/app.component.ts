@@ -24,6 +24,7 @@ export class AppComponent implements OnInit {
   mergeColor: string = '';
   selectionColor: string = '';
   sortColor: string = '';
+  resetButtonActive: boolean = false;
 
   @ViewChild(HomeComponent) home!: HomeComponent;
 
@@ -97,6 +98,28 @@ export class AppComponent implements OnInit {
     this.sortOptionsDisabled = true;
     this.generateDisabled = true;
     this.sliderDisabled = true;
+  }
+
+  resetChange(resetOn: boolean) {
+    this.resetButtonActive = resetOn;
+    this.sortDisabled = true;
+  }
+
+  resetClick() {
+    this.generateDisabled = false;
+    this.sliderDisabled = false;
+    this.sortOptionsDisabled = false;
+    this.selectionColor = '';
+    this.mergeColor = '';
+    this.bubbleColor = '';
+    this.quickColor = '';
+    this.activeSortingMethod = '';
+    this.numElements = 100;
+    this.barService.setNumElements(this.numElements);
+    this.generate();
+    this.sliderValue = 0.5;
+    this.home.reset();
+    this.resetButtonActive = false;
   }
 
   onActivate(componentRef: any) {
